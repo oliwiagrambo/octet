@@ -38,12 +38,12 @@ namespace octet {
       texture = 0;
       enabled = true;
     }
-
+	// Onirke
     void init(int _texture, float x, float y, float w, float h) {
       modelToWorld.loadIdentity();
       modelToWorld.translate(x, y, 0);
-      halfWidth = w * 0.5f;
-      halfHeight = h * 0.5f;
+	  halfWidth = w; // twice as big! 
+      halfHeight = h; 
       texture = _texture;
       enabled = true;
     }
