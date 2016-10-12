@@ -39,7 +39,8 @@ namespace octet {
       enabled = true;
     }
 	// Onirke
-    void init(int _texture, float x, float y, float w, float h) {
+    void init(int _texture, float x, float y, float w, float h) 
+	{
       modelToWorld.loadIdentity();
       modelToWorld.translate(x, y, 0);
 	  halfWidth = w; // twice as big! 
@@ -48,7 +49,8 @@ namespace octet {
       enabled = true;
     }
 
-    void render(texture_shader &shader, mat4t &cameraToWorld) {
+    void render(texture_shader &shader, mat4t &cameraToWorld)
+	{
       // invisible sprite... used for gameplay.
       if (!texture) return;
 
@@ -67,7 +69,8 @@ namespace octet {
 
       // this is an array of the positions of the corners of the sprite in 3D
       // a straight "float" here means this array is being generated here at runtime.
-      float vertices[] = {
+      float vertices[] =
+	  {
         -halfWidth, -halfHeight, 0,
          halfWidth, -halfHeight, 0,
          halfWidth,  halfHeight, 0,
@@ -81,7 +84,8 @@ namespace octet {
       glEnableVertexAttribArray(attribute_pos);
     
       // this is an array of the positions of the corners of the texture in 2D
-      static const float uvs[] = {
+      static const float uvs[] = 
+	  {
          0,  0,
          1,  0,
          1,  1,
@@ -104,14 +108,16 @@ namespace octet {
     }
 
     // position the object relative to another.
-    void set_relative(sprite &rhs, float x, float y) {
+    void set_relative(sprite &rhs, float x, float y) 
+	{
       modelToWorld = rhs.modelToWorld;
       modelToWorld.translate(x, y, 0);
     }
 
     // return true if this sprite collides with another.
     // note the "const"s which say we do not modify either sprite
-    bool collides_with(const sprite &rhs) const {
+    bool collides_with(const sprite &rhs) const
+	{
       float dx = rhs.modelToWorld[3][0] - modelToWorld[3][0];
       float dy = rhs.modelToWorld[3][1] - modelToWorld[3][1];
 
@@ -119,24 +125,25 @@ namespace octet {
       // for a collision
       return
         (fabsf(dx) < halfWidth + rhs.halfWidth) &&
-        (fabsf(dy) < halfHeight + rhs.halfHeight)
-      ;
+        (fabsf(dy) < halfHeight + rhs.halfHeight);
     }
 
-    bool is_above(const sprite &rhs, float margin) const {
+    bool is_above(const sprite &rhs, float margin) const 
+	{
       float dx = rhs.modelToWorld[3][0] - modelToWorld[3][0];
 
       return
-        (fabsf(dx) < halfWidth + margin)
-      ;
+        (fabsf(dx) < halfWidth + margin);
     }
 
-    bool &is_enabled() {
+    bool &is_enabled() 
+	{
       return enabled;
     }
   };
 
-  class invaderers_app : public octet::app {
+  class invaderers_app : public octet::app 
+  {
     // Matrix to transform points in our camera space to the world.
     // This lets us move our camera
     mat4t cameraToWorld;
@@ -144,7 +151,8 @@ namespace octet {
     // shader to draw a textured triangle
     texture_shader texture_shader_;
 
-    enum {
+    enum 
+	{
       num_sound_sources = 8,
       num_rows = 5,
       num_cols = 10,
@@ -206,31 +214,38 @@ namespace octet {
     // information for our text
     bitmap_font font;
 
-    ALuint get_sound_source() { return sources[cur_source++ % num_sound_sources]; }
+    ALuint get_sound_source() { return sources[cur_source++ % num_sound_sources];
+ }
 
     // called when we hit an enemy
-    void on_hit_invaderer() {
+    void on_hit_invaderer() 
+	{
       ALuint source = get_sound_source();
       alSourcei(source, AL_BUFFER, bang);
       alSourcePlay(source);
 
       live_invaderers--;
-      score++;
-      if (live_invaderers == 4) {
+      score--; //ONIRKE  when you hit invader your score is going down
+      if (live_invaderers == 4) 
+	  {
         invader_velocity *= 4;
-      } else if (live_invaderers == 0) {
+      }
+	  else if (live_invaderers == 0) 
+	  {
         game_over = true;
         sprites[game_over_sprite].translate(-20, 0);
       }
     }
 
     // called when we are hit
-    void on_hit_ship() {
+    void on_hit_ship() 
+	{
       ALuint source = get_sound_source();
       alSourcei(source, AL_BUFFER, bang);
       alSourcePlay(source);
 
-      if (--num_lives == 0) {
+      if (++num_lives == 0)  //ONIRKE do i need this?? 
+	  {
         game_over = true;
         sprites[game_over_sprite].translate(-20, 0);
       }
@@ -254,13 +269,20 @@ namespace octet {
     }
 
     // fire button (space)
-    void fire_missiles() {
-      if (missiles_disabled) {
+    void fire_missiles() 
+	{
+      if (missiles_disabled) 
+	  {
         --missiles_disabled;
-      } else if (is_key_going_down(' ')) {
+      } else if (is_key_going_down(' '))
+	  
+	  {
         // find a missile
-        for (int i = 0; i != num_missiles; ++i) {
-          if (!sprites[first_missile_sprite+i].is_enabled()) {
+
+        for (int i = 0; i != num_missiles; ++i)
+		{
+          if (!sprites[first_missile_sprite+i].is_enabled())
+		  {
             sprites[first_missile_sprite+i].set_relative(sprites[ship_sprite], 0, 0.5f);
             sprites[first_missile_sprite+i].is_enabled() = true;
             missiles_disabled = 5;
@@ -274,18 +296,25 @@ namespace octet {
     }
 
     // pick and invader and fire a bomb
-    void fire_bombs() {
-      if (bombs_disabled) {
+    void fire_bombs()
+	{
+      if (bombs_disabled) 
+	  {
         --bombs_disabled;
-      } else {
+      } else
+	  {
         // find an invaderer
         sprite &ship = sprites[ship_sprite];
-        for (int j = randomizer.get(0, num_invaderers); j < num_invaderers; ++j) {
+        for (int j = randomizer.get(0, num_invaderers); j < num_invaderers; ++j) 
+		{
           sprite &invaderer = sprites[first_invaderer_sprite+j];
-          if (invaderer.is_enabled() && invaderer.is_above(ship, 0.3f)) {
+          if (invaderer.is_enabled() && invaderer.is_above(ship, 0.3f))
+		  {
             // find a bomb
-            for (int i = 0; i != num_bombs; ++i) {
-              if (!sprites[first_bomb_sprite+i].is_enabled()) {
+            for (int i = 0; i != num_bombs; ++i) 
+			{
+              if (!sprites[first_bomb_sprite+i].is_enabled())
+			  {
                 sprites[first_bomb_sprite+i].set_relative(invaderer, 0, -0.25f);
                 sprites[first_bomb_sprite+i].is_enabled() = true;
                 bombs_disabled = 30;
@@ -302,15 +331,20 @@ namespace octet {
     }
 
     // animate the missiles
-    void move_missiles() {
+    void move_missiles()
+	{
       const float missile_speed = 0.3f;
-      for (int i = 0; i != num_missiles; ++i) {
+      for (int i = 0; i != num_missiles; ++i) 
+	  {
         sprite &missile = sprites[first_missile_sprite+i];
-        if (missile.is_enabled()) {
+        if (missile.is_enabled())
+		{
           missile.translate(0, missile_speed);
-          for (int j = 0; j != num_invaderers; ++j) {
+          for (int j = 0; j != num_invaderers; ++j) 
+		  {
             sprite &invaderer = sprites[first_invaderer_sprite+j];
-            if (invaderer.is_enabled() && missile.collides_with(invaderer)) {
+            if (invaderer.is_enabled() && missile.collides_with(invaderer)) 
+			{
               invaderer.is_enabled() = false;
               invaderer.translate(20, 0);
               missile.is_enabled() = false;
@@ -320,7 +354,8 @@ namespace octet {
               goto next_missile;
             }
           }
-          if (missile.collides_with(sprites[first_border_sprite+1])) {
+          if (missile.collides_with(sprites[first_border_sprite+1]))
+		  {
             missile.is_enabled() = false;
             missile.translate(20, 0);
           }
@@ -330,20 +365,25 @@ namespace octet {
     }
 
     // animate the bombs
-    void move_bombs() {
+    void move_bombs() 
+	{
       const float bomb_speed = 0.2f;
-      for (int i = 0; i != num_bombs; ++i) {
+      for (int i = 0; i != num_bombs; ++i)
+	  {
         sprite &bomb = sprites[first_bomb_sprite+i];
-        if (bomb.is_enabled()) {
+        if (bomb.is_enabled()) 
+		{
           bomb.translate(0, -bomb_speed);
-          if (bomb.collides_with(sprites[ship_sprite])) {
+          if (bomb.collides_with(sprites[ship_sprite]))
+		  {
             bomb.is_enabled() = false;
             bomb.translate(20, 0);
             bombs_disabled = 50;
             on_hit_ship();
             goto next_bomb;
           }
-          if (bomb.collides_with(sprites[first_border_sprite+0])) {
+          if (bomb.collides_with(sprites[first_border_sprite+0]))
+		  {
             bomb.is_enabled() = false;
             bomb.translate(20, 0);
           }
@@ -353,20 +393,26 @@ namespace octet {
     }
 
     // move the array of enemies
-    void move_invaders(float dx, float dy) {
-      for (int j = 0; j != num_invaderers; ++j) {
+    void move_invaders(float dx, float dy)
+	{
+      for (int j = 0; j != num_invaderers; ++j)
+	  {
         sprite &invaderer = sprites[first_invaderer_sprite+j];
-        if (invaderer.is_enabled()) {
+        if (invaderer.is_enabled())
+		{
           invaderer.translate(dx, dy);
         }
       }
     }
 
     // check if any invaders hit the sides.
-    bool invaders_collide(sprite &border) {
-      for (int j = 0; j != num_invaderers; ++j) {
+    bool invaders_collide(sprite &border)
+	{
+      for (int j = 0; j != num_invaderers; ++j) 
+	  {
         sprite &invaderer = sprites[first_invaderer_sprite+j];
-        if (invaderer.is_enabled() && invaderer.collides_with(border)) {
+        if (invaderer.is_enabled() && invaderer.collides_with(border))
+		{
           return true;
         }
       }
@@ -374,7 +420,8 @@ namespace octet {
     }
 
 
-    void draw_text(texture_shader &shader, float x, float y, float scale, const char *text) {
+    void draw_text(texture_shader &shader, float x, float y, float scale, const char *text)
+	{
       mat4t modelToWorld;
       modelToWorld.loadIdentity();
       modelToWorld.translate(x, y, 0);
@@ -388,7 +435,10 @@ namespace octet {
       glScalef(scale, scale, 1);
       glGetFloatv(GL_MODELVIEW_MATRIX, (float*)&tmp);*/
 
-      enum { max_quads = 32 };
+      enum 
+	  { 
+		  max_quads = 32 
+	  };
       bitmap_font::vertex vertices[max_quads*4];
       uint32_t indices[max_quads*6];
       aabb bb(vec3(0, 0, 0), vec3(256, 256, 0));
@@ -410,11 +460,13 @@ namespace octet {
   public:
 
     // this is called when we construct the class
-    invaderers_app(int argc, char **argv) : app(argc, argv), font(512, 256, "assets/big.fnt") {
+    invaderers_app(int argc, char **argv) : app(argc, argv), font(512, 256, "assets/big.fnt")
+	{//ONIRKE ? what is this ??
     }
 
     // this is called once OpenGL is initialized
-    void app_init() {
+    void app_init()
+	{
       // set up the shader
       texture_shader_.init();
 
@@ -431,8 +483,10 @@ namespace octet {
       sprites[game_over_sprite].init(GameOver, 20, 0, 3, 1.5f);
 
       GLuint invaderer = resource_dict::get_texture_handle(GL_RGBA, "assets/invaderers/invaderer.gif");
-      for (int j = 0; j != num_rows; ++j) {
-        for (int i = 0; i != num_cols; ++i) {
+      for (int j = 0; j != num_rows; ++j)
+	  {
+        for (int i = 0; i != num_cols; ++i) 
+		{
           assert(first_invaderer_sprite + i + j*num_cols <= last_invaderer_sprite);
           sprites[first_invaderer_sprite + i + j*num_cols].init(
             invaderer, ((float)i - num_cols * 0.5f) * 0.5f, 2.50f - ((float)j * 0.5f), 0.25f, 0.25f
@@ -449,7 +503,8 @@ namespace octet {
 
       // use the missile texture
       GLuint missile = resource_dict::get_texture_handle(GL_RGBA, "assets/invaderers/missile.gif");
-      for (int i = 0; i != num_missiles; ++i) {
+      for (int i = 0; i != num_missiles; ++i)
+	  {
         // create missiles off-screen
         sprites[first_missile_sprite+i].init(missile, 20, 0, 0.0625f, 0.25f);
         sprites[first_missile_sprite+i].is_enabled() = false;
@@ -457,7 +512,8 @@ namespace octet {
 
       // use the bomb texture
       GLuint bomb = resource_dict::get_texture_handle(GL_RGBA, "assets/invaderers/bomb.gif");
-      for (int i = 0; i != num_bombs; ++i) {
+      for (int i = 0; i != num_bombs; ++i)
+	  {
         // create bombs off-screen
         sprites[first_bomb_sprite+i].init(bomb, 20, 0, 0.0625f, 0.25f);
         sprites[first_bomb_sprite+i].is_enabled() = false;
@@ -480,8 +536,10 @@ namespace octet {
     }
 
     // called every frame to move things
-    void simulate() {
-      if (game_over) {
+    void simulate()
+	{
+      if (game_over) 
+	  {
         return;
       }
 
@@ -505,7 +563,8 @@ namespace octet {
     }
 
     // this is called to draw the world
-    void draw_world(int x, int y, int w, int h) {
+    void draw_world(int x, int y, int w, int h) 
+	{
       simulate();
 
       // set a viewport - includes whole window area
@@ -523,7 +582,8 @@ namespace octet {
       glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
       // draw all the sprites
-      for (int i = 0; i != num_sprites; ++i) {
+      for (int i = 0; i != num_sprites; ++i) 
+	  {
         sprites[i].render(texture_shader_, cameraToWorld);
       }
 
