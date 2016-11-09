@@ -18,6 +18,8 @@
 //
 #include <iostream>
 #include <fstream>
+#include <Mmsystem.h>
+#include <mciapi.h>
 
 namespace octet {
   class sprite {
@@ -36,7 +38,8 @@ namespace octet {
     // true if this sprite is enabled.
     bool enabled;
   public:
-    sprite() {
+    sprite() 
+	{
       texture = 0;
       enabled = true;
     }
@@ -44,7 +47,7 @@ namespace octet {
     void init(int _texture, float x, float y, float w, float h) 
 	{
       modelToWorld.loadIdentity();
-      modelToWorld.translate(x, y, 0);
+      modelToWorld.translate(x,y , 0);
 	  halfWidth = w; // twice as big! 
       halfHeight = h; 
       texture = _texture;
@@ -82,7 +85,7 @@ namespace octet {
       // attribute_pos (=0) is position of each corner
       // each corner has 3 floats (x, y, z)
       // there is no gap between the 3 floats and hence the stride is 3*sizeof(float)
-      glVertexAttribPointer(attribute_pos, 3, GL_FLOAT, GL_FALSE, 3*sizeof(float), (void*)vertices );
+      glVertexAttribPointer(attribute_pos, 3, GL_FLOAT, GL_FALSE, 3*sizeof(float) , (void*)vertices );
       glEnableVertexAttribArray(attribute_pos);
     
       // this is an array of the positions of the corners of the texture in 2D
@@ -105,15 +108,16 @@ namespace octet {
     }
 
     // move the object
-    void translate(float x, float y) {
-      modelToWorld.translate(x, y, 0);
+    void translate(float x, float y) 
+	{
+      modelToWorld.translate(x, y , 0);
     }
 
     // position the object relative to another.
     void set_relative(sprite &rhs, float x, float y) 
 	{
       modelToWorld = rhs.modelToWorld;
-      modelToWorld.translate(x, y, 0);
+      modelToWorld.translate(x, y , 0);
     }
 
     // return true if this sprite collides with another.
@@ -167,6 +171,7 @@ namespace octet {
       ship_sprite = 0,
       game_over_sprite,
 
+
       first_invaderer_sprite,
       last_invaderer_sprite = first_invaderer_sprite + num_invaderers -1,
 
@@ -201,6 +206,7 @@ namespace octet {
     // sounds
     ALuint whoosh;
     ALuint bang;
+	ALuint Ode;
     unsigned cur_source;
     ALuint sources[num_sound_sources];
 
@@ -271,7 +277,7 @@ namespace octet {
 
     // use the keyboard to move the ship
     void move_ship() {
-      const float ship_speed = 0.05f;
+      const float ship_speed = 0.5f;
       // left and right arrows
       if (is_key_down(key_left)) {
         sprites[ship_sprite].translate(-ship_speed, 0);
@@ -544,6 +550,7 @@ namespace octet {
 
       // sounds
       whoosh = resource_dict::get_sound_handle(AL_FORMAT_MONO16, "assets/invaderers/whoosh.wav");
+	  Ode = resource_dict::get_sound_handle(AL_FORMAT_MONO16, "assets/invaderers/Ode.wav");
       bang = resource_dict::get_sound_handle(AL_FORMAT_MONO16, "assets/invaderers/bang.wav");
       cur_source = 0;
       alGenSources(num_sound_sources, sources);
@@ -590,6 +597,10 @@ namespace octet {
     void draw_world(int x, int y, int w, int h) 
 	{
       simulate();
+
+	  ALuint source = get_sound_source();
+	  alSourcei(source, AL_BUFFER, Ode);
+	  alSourcePlay(source);
 
       // set a viewport - includes whole window area
       glViewport(x, y, w, h);
