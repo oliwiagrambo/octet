@@ -57,6 +57,7 @@ namespace octet { namespace shaders {
       glUniformMatrix4fv(modelToProjectionIndex_, 1, GL_FALSE, modelToProjection.get());
 
       // now we are ready to define the attributes and draw the triangles.
+
     }
   };
 }}

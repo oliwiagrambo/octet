@@ -238,13 +238,13 @@ namespace octet {
 	  if (live_invaderers == 0) 
 	  {
         game_over = true;
-			/*{
+			{
 				ofstream OutputFile;
 				OutputFile.open("scores.txt"); //creates it if it doesn't exist
 				OutputFile << score;
 				OutputFile.close();
 			}
-			*/
+			
         sprites[game_over_sprite].translate(-20, 0);
       }
     }
@@ -259,19 +259,19 @@ namespace octet {
       if (num_lives == 0)
 	  {
         game_over = true;
-		{
+		/*{
 			std::ofstream OutputFile;
 			OutputFile.open("scores.txt"); //creates it if it doesn't exist
 			OutputFile << score;
 			OutputFile.close();
-		}
+		}*/
         sprites[game_over_sprite].translate(-20, 0);
       }
     }
 
     // use the keyboard to move the ship
     void move_ship() {
-      const float ship_speed = 0.05f;
+      const float ship_speed = 0.5f;
       // left and right arrows
       if (is_key_down(key_left)) {
         sprites[ship_sprite].translate(-ship_speed, 0);

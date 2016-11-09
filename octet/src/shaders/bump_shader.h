@@ -149,11 +149,11 @@ namespace octet { namespace shaders {
             specular_light * specular.xyz
           ;
           gl_FragColor.w = diffuse.w;
-          //gl_FragColor = emission;
-          //gl_FragColor = vec4(diffuse_light, 1);
-          //gl_FragColor = vec4(num_lights, num_lights, num_lights, 1);
+          gl_FragColor = emission;
+          gl_FragColor = vec4(diffuse_light, 1);
+          gl_FragColor = vec4(num_lights, num_lights, num_lights, 1);
           // how to debug your fragment shader: set gl_FragColor to the value you want to look at!
-          //gl_FragColor = vec4(1, 1, 0, 1);
+          gl_FragColor = vec4(1, 1, 0, 1);
         }
       );
     
