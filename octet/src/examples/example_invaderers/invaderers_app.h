@@ -16,6 +16,8 @@
 //   Texture loaded from GIF file
 //   Audio
 //
+#include <iostream>
+#include <fstream>
 
 namespace octet {
   class sprite {
@@ -154,8 +156,8 @@ namespace octet {
     enum 
 	{
       num_sound_sources = 8,
-      num_rows = 5,
-      num_cols = 10,
+      num_rows = 3, // i need less invaderers to actually be able to miss them 
+      num_cols = 5,
       num_missiles = 2,
       num_bombs = 2,
       num_borders = 4,
@@ -166,16 +168,16 @@ namespace octet {
       game_over_sprite,
 
       first_invaderer_sprite,
-      last_invaderer_sprite = first_invaderer_sprite + num_invaderers - 1,
+      last_invaderer_sprite = first_invaderer_sprite + num_invaderers -1,
 
       first_missile_sprite,
-      last_missile_sprite = first_missile_sprite + num_missiles - 1,
+      last_missile_sprite = first_missile_sprite + num_missiles -1,
 
       first_bomb_sprite,
-      last_bomb_sprite = first_bomb_sprite + num_bombs - 1,
+      last_bomb_sprite = first_bomb_sprite + num_bombs -1,
 
       first_border_sprite,
-      last_border_sprite = first_border_sprite + num_borders - 1,
+      last_border_sprite = first_border_sprite + num_borders -1,
 
       num_sprites,
 
@@ -225,14 +227,24 @@ namespace octet {
       alSourcePlay(source);
 
       live_invaderers--;
-      score--; //ONIRKE  when you hit invader your score is going down
-      if (live_invaderers == 4) 
+      score--; 
+	  //ONIRKE  when you hit invader your score is going down
+     /* if (live_invaderers == 4) 
 	  {
         invader_velocity *= 4;
       }
-	  else if (live_invaderers == 0) 
+	  else
+	  */
+	  if (live_invaderers == 0) 
 	  {
         game_over = true;
+			/*{
+				ofstream OutputFile;
+				OutputFile.open("scores.txt"); //creates it if it doesn't exist
+				OutputFile << score;
+				OutputFile.close();
+			}
+			*/
         sprites[game_over_sprite].translate(-20, 0);
       }
     }
@@ -244,9 +256,15 @@ namespace octet {
       alSourcei(source, AL_BUFFER, bang);
       alSourcePlay(source);
 
-      if (++num_lives == 0)  //ONIRKE do i need this?? 
+      if (num_lives == 0)
 	  {
         game_over = true;
+		{
+			std::ofstream OutputFile;
+			OutputFile.open("scores.txt"); //creates it if it doesn't exist
+			OutputFile << score;
+			OutputFile.close();
+		}
         sprites[game_over_sprite].translate(-20, 0);
       }
     }
@@ -350,14 +368,15 @@ namespace octet {
               missile.is_enabled() = false;
               missile.translate(20, 0);
               on_hit_invaderer();
-
               goto next_missile;
+			  score--;
             }
           }
-          if (missile.collides_with(sprites[first_border_sprite+1]))
+          if (missile.collides_with(sprites[first_border_sprite+1])) //missile MISS invader
 		  {
             missile.is_enabled() = false;
             missile.translate(20, 0);
+			score++; 
           }
         }
       next_missile:;
@@ -381,11 +400,14 @@ namespace octet {
             bombs_disabled = 50;
             on_hit_ship();
             goto next_bomb;
+			score++;
           }
           if (bomb.collides_with(sprites[first_border_sprite+0]))
 		  {
             bomb.is_enabled() = false;
             bomb.translate(20, 0);
+			score--;
+			num_lives--; //score and life decrease when you don't get hit
           }
         }
       next_bomb:;
@@ -460,8 +482,9 @@ namespace octet {
   public:
 
     // this is called when we construct the class
-    invaderers_app(int argc, char **argv) : app(argc, argv), font(512, 256, "assets/big.fnt")
-	{//ONIRKE ? what is this ??
+    invaderers_app(int argc, char **argv) : app(argc, argv), font(512, 256, "assets/big.fnt") 
+	{
+		//ONIRKE ? what is this ??
     }
 
     // this is called once OpenGL is initialized
@@ -528,9 +551,9 @@ namespace octet {
       // sundry counters and game state.
       missiles_disabled = 0;
       bombs_disabled = 50;
-      invader_velocity = 0.01f;
+      invader_velocity = 0.1f;
       live_invaderers = num_invaderers;
-      num_lives = 3;
+      num_lives = 10;
       game_over = false;
       score = 0;
     }
@@ -556,7 +579,8 @@ namespace octet {
       move_invaders(invader_velocity, 0);
 
       sprite &border = sprites[first_border_sprite+(invader_velocity < 0 ? 2 : 3)];
-      if (invaders_collide(border)) {
+      if (invaders_collide(border)) 
+	  {
         invader_velocity = -invader_velocity;
         move_invaders(invader_velocity, -0.1f);
       }

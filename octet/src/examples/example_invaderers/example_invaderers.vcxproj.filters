@@ -12,9 +12,6 @@
     <Filter Include="platform">
       <UniqueIdentifier>{dda91860-e541-4fdb-a790-f6b5e7902ffb}</UniqueIdentifier>
     </Filter>
-    <Filter Include="scene">
-      <UniqueIdentifier>{1280c880-8181-435f-8975-ff6ac07df6ad}</UniqueIdentifier>
-    </Filter>
     <Filter Include="resources">
       <UniqueIdentifier>{f85a3f01-4932-410d-b0e9-3861cb4ebf0d}</UniqueIdentifier>
     </Filter>
@@ -32,6 +29,9 @@
     </Filter>
     <Filter Include="shaders">
       <UniqueIdentifier>{22786083-47af-48b2-98c4-2963f667bc44}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\scene">
+      <UniqueIdentifier>{1280c880-8181-435f-8975-ff6ac07df6ad}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -269,88 +269,88 @@
       <Filter>resources</Filter>
     </ClInclude>
     <ClInclude Include="..\..\scene\animation.h">
-      <Filter>scene</Filter>
+      <Filter>Source Files\scene</Filter>
     </ClInclude>
     <ClInclude Include="..\..\scene\animation_instance.h">
-      <Filter>scene</Filter>
+      <Filter>Source Files\scene</Filter>
     </ClInclude>
     <ClInclude Include="..\..\scene\camera_instance.h">
-      <Filter>scene</Filter>
+      <Filter>Source Files\scene</Filter>
     </ClInclude>
     <ClInclude Include="..\..\scene\displacement_map.h">
-      <Filter>scene</Filter>
+      <Filter>Source Files\scene</Filter>
     </ClInclude>
     <ClInclude Include="..\..\scene\image.h">
-      <Filter>scene</Filter>
+      <Filter>Source Files\scene</Filter>
     </ClInclude>
     <ClInclude Include="..\..\scene\indexer.h">
-      <Filter>scene</Filter>
+      <Filter>Source Files\scene</Filter>
     </ClInclude>
     <ClInclude Include="..\..\scene\light.h">
-      <Filter>scene</Filter>
+      <Filter>Source Files\scene</Filter>
     </ClInclude>
     <ClInclude Include="..\..\scene\light_instance.h">
-      <Filter>scene</Filter>
+      <Filter>Source Files\scene</Filter>
     </ClInclude>
     <ClInclude Include="..\..\scene\material.h">
-      <Filter>scene</Filter>
+      <Filter>Source Files\scene</Filter>
     </ClInclude>
     <ClInclude Include="..\..\scene\mesh.h">
-      <Filter>scene</Filter>
+      <Filter>Source Files\scene</Filter>
     </ClInclude>
     <ClInclude Include="..\..\scene\mesh_box.h">
-      <Filter>scene</Filter>
+      <Filter>Source Files\scene</Filter>
     </ClInclude>
     <ClInclude Include="..\..\scene\mesh_cylinder.h">
-      <Filter>scene</Filter>
+      <Filter>Source Files\scene</Filter>
     </ClInclude>
     <ClInclude Include="..\..\scene\mesh_instance.h">
-      <Filter>scene</Filter>
+      <Filter>Source Files\scene</Filter>
     </ClInclude>
     <ClInclude Include="..\..\scene\mesh_particle_system.h">
-      <Filter>scene</Filter>
+      <Filter>Source Files\scene</Filter>
     </ClInclude>
     <ClInclude Include="..\..\scene\mesh_points.h">
-      <Filter>scene</Filter>
+      <Filter>Source Files\scene</Filter>
     </ClInclude>
     <ClInclude Include="..\..\scene\mesh_sphere.h">
-      <Filter>scene</Filter>
+      <Filter>Source Files\scene</Filter>
     </ClInclude>
     <ClInclude Include="..\..\scene\mesh_text.h">
-      <Filter>scene</Filter>
+      <Filter>Source Files\scene</Filter>
     </ClInclude>
     <ClInclude Include="..\..\scene\mesh_voxels.h">
-      <Filter>scene</Filter>
+      <Filter>Source Files\scene</Filter>
     </ClInclude>
     <ClInclude Include="..\..\scene\mesh_voxel_subcube.h">
-      <Filter>scene</Filter>
+      <Filter>Source Files\scene</Filter>
     </ClInclude>
     <ClInclude Include="..\..\scene\param.h">
-      <Filter>scene</Filter>
+      <Filter>Source Files\scene</Filter>
     </ClInclude>
     <ClInclude Include="..\..\scene\sampler.h">
-      <Filter>scene</Filter>
+      <Filter>Source Files\scene</Filter>
     </ClInclude>
     <ClInclude Include="..\..\scene\scene.h">
-      <Filter>scene</Filter>
+      <Filter>Source Files\scene</Filter>
     </ClInclude>
     <ClInclude Include="..\..\scene\scene_node.h">
-      <Filter>scene</Filter>
+      <Filter>Source Files\scene</Filter>
     </ClInclude>
     <ClInclude Include="..\..\scene\skeleton.h">
-      <Filter>scene</Filter>
+      <Filter>Source Files\scene</Filter>
     </ClInclude>
     <ClInclude Include="..\..\scene\skin.h">
-      <Filter>scene</Filter>
+      <Filter>Source Files\scene</Filter>
     </ClInclude>
     <ClInclude Include="..\..\scene\smooth.h">
-      <Filter>scene</Filter>
+      <Filter>Source Files\scene</Filter>
     </ClInclude>
     <ClInclude Include="..\..\scene\visual_scene.h">
-      <Filter>scene</Filter>
+      <Filter>Source Files\scene</Filter>
     </ClInclude>
     <ClInclude Include="..\..\scene\wireframe.h">
-      <Filter>scene</Filter>
+      <Filter>Source Files\scene</Filter>
     </ClInclude>
     <ClInclude Include="..\..\shaders\bump_shader.h">
       <Filter>shaders</Filter>
